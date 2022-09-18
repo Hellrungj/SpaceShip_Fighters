@@ -1,6 +1,6 @@
 import os
 import pygame
-from typing import Sequence
+from typing import Any, Sequence
 
 from SpaceShipFighters.GameSetting import GameSetting
 from SpaceShipFighters.Player import Player
@@ -60,13 +60,6 @@ def handle_movement(player: Player, keys_pressed: Sequence[bool], screen: Screen
     ):  # DOWN
         player.surface.y += player.movement_velocity
 
-
-def handle_bullet_fire(
-    player: Player, keys_pressed: Sequence[bool], screen: Screen, trager_player: Player
-):
-    ...
-
-
 def draw_window(screen: Screen, player1: Player, player2: Player) -> None:
     screen.surface.blit(screen.background, (0, 0))
     pygame.draw.rect(screen.surface, (0, 0, 0), screen.border)
@@ -111,6 +104,26 @@ def handle_bullets(player1: Player, player2: Player, screen: Screen):
         elif bullet.surface.x < 0:
             player2.bullets.remove(bullet)
 
+def handle_bullet_fire(player1: Player, player2: Player, event: Any, settings: GameSetting, bullet_fire_sound: pygame.mixer.Sound):
+    if event.type == pygame.KEYDOWN:
+        if (event.key == pygame.K_1 and len(player1.bullets) < settings.max_bullets):
+            coordinate: tuple = (player1.x + player1.width, player1.y + player1.height // 2 - 2, 10, 5)
+            player1.add_bullet(coordinate, settings.bullet_velocity)
+            bullet_fire_sound.play()
+
+        if (event.key == pygame.K_9 and len(player2.bullets) < settings.max_bullets):
+            coordinate: tuple = (player2.x, player2.y + player2.height // 2 - 2, 10, 5)
+            player2.add_bullet(coordinate, settings.bullet_velocity)
+            bullet_fire_sound.play()
+
+def handle_hit(event: Any, player1: Player, player2: Player, bullet_hit_sound: pygame.mixer.Sound):
+    if event.type == YELLOW_HIT:
+        player1.health -= 1
+        bullet_hit_sound.play()
+
+    if event.type == RED_HIT:
+        player2.health -= 1
+        bullet_hit_sound.play()
 
 def draw_winner(text: str, screen: Screen):
     draw_text = WINNNER_FONT.render(text, 1, (255, 255, 255))
@@ -186,24 +199,8 @@ def main() -> None:
                 pygame.quit()
                 exit()
 
-            if event.type == pygame.KEYDOWN:
-                if (event.key == pygame.K_1 and len(player1.bullets) < settings.max_bullets):
-                    coordinate: tuple = (player1.x + player1.width, player1.y + player1.height // 2 - 2, 10, 5)
-                    player1.add_bullet(coordinate, settings.bullet_velocity)
-                    bullet_fire_sound.play()
-
-                if (event.key == pygame.K_9 and len(player2.bullets) < settings.max_bullets):
-                    coordinate: tuple = (player2.x, player2.y + player2.height // 2 - 2, 10, 5)
-                    player2.add_bullet(coordinate, settings.bullet_velocity)
-                    bullet_fire_sound.play()
-
-            if event.type == YELLOW_HIT:
-                player1.health -= 1
-                bullet_hit_sound.play()
-
-            if event.type == RED_HIT:
-                player2.health -= 1
-                bullet_hit_sound.play()
+            handle_bullet_fire(player1, player2, event, settings, bullet_fire_sound)
+            handle_hit(event, player1, player2, bullet_hit_sound)
 
         winner_text = ""
         if player1.health <= 0:
