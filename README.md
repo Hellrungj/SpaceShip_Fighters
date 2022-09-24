@@ -1,6 +1,6 @@
 # SpaceShip Fighters
 
-[![Python](https://img.shields.io/badge/-Python-05122A?style=flat&logo=python)&nbsp;](https://www.python.org/)
+[![Python](https://img.shields.io/badge/-Python-05122A?style=flat&logo=python)](https://www.python.org/)
 
 Tutorial Game using pygame. The game is two player spaceship fighter game. The first player to kill the other wins.
 
