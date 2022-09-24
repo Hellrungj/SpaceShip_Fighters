@@ -4,7 +4,7 @@
 
 Tutorial Game using pygame. The game is two player spaceship fighter game. The first player to kill the other wins.
 
-## Getting Started
+## Getting Started:
 
 ### Prerequisites:
 - [Python 3.10](https://www.python.org/downloads/release/python-3100/)
@@ -29,7 +29,7 @@ pipenv main.py
 This code is from a tutoual for learning pygame. This code is for the use of learning about pygame.
 [Pygame in 90 Minutes - For Beginners by Tech With Tim](https://www.youtube.com/watch?v=jO6qQDNa2UY)
 
-## Authors
+## Authors:
 Users: [Hellrungj](https://github.com/Hellrungj/)
 
 ## Contact Info:
